@@ -6,17 +6,29 @@ const port = 3000;
 
 const config = {
   host: 'mysql',
-  database: "test",
-  user: "root",
-  password: "root",
+  user: 'root',
+  password: 'root',
+  database: 'test',
   connectionLimit: 100,
-  port:3001
-}
+  port: 3306
+};
+
 
 const pool = mysql.createPool(config);
 
-pool.query("SELECT * FROM some_table", (err, data) => {
-  if (err) throw(err)
+pool.query("CREATE DATABASE IF NOT EXISTS test;", (err, data) => {
+  if (err) throw(err);
+  console.log(data);
+});
+
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+  );
+`, (err, data) => {
+  if (err) throw(err);
   console.log(data);
 });
 
